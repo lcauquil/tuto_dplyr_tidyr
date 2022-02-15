@@ -1,0 +1,11 @@
+/*ajoute ascenseur aux sorties trop longues*/
+.scroll-300 {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: inherit;
+}
+
+/*laisse un espace avant chaque titre*/
+h1, .h1, h2, .h2, h3, .h3 {
+  margin-top: 70px;
+}

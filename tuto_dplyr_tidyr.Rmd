@@ -1,0 +1,637 @@
+---
+title: "tuto_dplyr_tidyr"
+author: "Laurent Cauquil"
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    css: css_style.css
+    keep_md: TRUE
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      collapse = TRUE)
+```
+
+## Packages
+
+```{r}
+## data manipulation
+suppressPackageStartupMessages(library(dplyr))
+library(tidyr)
+library(broom)
+
+## dataset
+library(palmerpenguins)
+library(phyloseq)
+
+## visualisation des donnees
+suppressPackageStartupMessages(library(DataExplorer))
+library(ggplot2)
+```
+
+<br>
+
+**Raccourcis pour obtenir le pipe: `Ctrl + Alt + M`**
+
+## Penguins dataset
+
+**Chargement de l'objet penguins**
+
+```{r}
+data(penguins)
+```
+
+### Description de la table
+
+ | Header           |Type     |   Description| 
+ |:-----------------|:--------|:----------------| 
+ |species		        |factor   |penguin species (Adélie, Chinstrap and Gentoo)|
+ |island		        |factor   |island in Palmer Archipelago, Antarctica (Biscoe, Dream or Torgersen)|
+ |bill_length_mm    |number   |bill length (millimeters)|
+ |bill_depth_mm     |number   |bill depth (millimeters)|
+ |flipper_length_mm |integer  |flipper length (millimeters)|
+ |body_mass_g	      |integer  |body mass (grams)|
+ |sex	 	            |factor   |penguin sex (female, male)|
+ |year		          |integer  |the study year (2007, 2008, or 2009)|
+
+
+### Objet de class tibble
+
+C'est un data.frame au format tibble.  
+L'affichage des colonnes s'adapte à la largeur de la fenêtre de sortie.  
+Les dimensions de la table ainsi que le type de chaque colonne sont précisés.
+
+```{r}
+penguins
+```
+
+L'objet reste un data.frame mais avec les caractéristiques supplémentaires d'un objet de type tibble (tbl)  
+
+```{r}
+class(penguins)
+```
+
+Conversion de la variable année en factor
+
+```{r}
+penguins$year <- factor(penguins$year)
+```
+
+### Exploration des données de la table
+
+```{r}
+DataExplorer::plot_intro(penguins)
+DataExplorer::plot_bar(penguins)
+DataExplorer::plot_bar(penguins, by = "island")
+```
+
+## Fonction `filter()`
+
+Sélection de lignes par des valeurs
+
+**Sélectionne les lignes pour lesquelles le poids > 4000 g**
+
+```{r}
+penguins |> 
+  filter(body_mass_g > 4000)
+```
+
+>**TIDYLOG**  
+
+Le package `tidylog` permet d'afficher le résultat de chaque opération effectuée par la plupart des fonctions des package `dplyr` et `tidyr`.  
+Peut éventuellement ralentir une opération.  
+
+```{r}
+suppressPackageStartupMessages(library(tidylog))
+```
+
+**Sélectionne les lignes correspondant aux males**
+
+```{r}
+penguins |> 
+  filter(sex == "male")
+```
+
+**Sélectionne les lignes correspondant aux males pour un poids > 4000 gr**
+
+```{r}
+penguins |> 
+  filter(sex == "male", body_mass_g > 4000)
+penguins |> 
+  filter(sex == "male" & body_mass_g > 4000)
+```
+
+**Sélectionne les poids compris entre 3500 et 4000 gr**
+
+```{r}
+penguins |> 
+  filter(between(body_mass_g,  3500, 4500))
+```
+
+**Sélectionne les poids  < 3500 et > 4000 gr (utiliser ! devant between)**
+
+```{r}
+penguins |> 
+  filter(!between(body_mass_g,  3500, 4500))
+```
+
+**Sélectionne les mesures faites dans les années 2007 et 2009**
+
+```{r}
+penguins |> 
+  filter(year %in% c("2007", "2008"))
+```
+
+**Sélectionne les poids > au poids moyen**
+
+```{r}
+penguins |> 
+  filter(body_mass_g > mean(body_mass_g))
+```
+
+<br>
+
+> Pas de résultat
+> ATTENTION: présence de NA's !
+
+```{r}
+penguins |> 
+  filter(body_mass_g > mean(body_mass_g, na.rm = T))
+```
+
+<br>
+
+> Pour la suite du script on supprime toutes les lignes avec au moins 1 NA
+
+```{r}
+penguins |> 
+  na.omit() -> penguins
+```
+
+```{r}
+penguins |> 
+  filter(body_mass_g > mean(body_mass_g))
+```
+
+**Sélectionne les males de poids > au poids moyen (de tous les poips)**
+
+```{r}
+penguins |> 
+  filter(body_mass_g > mean(body_mass_g)) |> 
+  filter(sex == "male")
+```
+
+**Sélectionne les noms d'espèces avec la syllabe "de" dedans**  
+(aucun intérêt, c'est pour l'exemple `r emo::ji("slightly_smiling_face")`)
+
+```{r}
+penguins |> 
+  filter(grepl("de", species))
+```
+
+## Fonction `arrange()`
+
+Appliquer un tri croissant sur une ou plusieurs colonnes
+
+**Tri croissant par le poids**
+
+```{r}
+penguins |> 
+  arrange(body_mass_g)
+```
+
+**Tri décroissant par le poids**
+
+```{r}
+penguins |> 
+  arrange(desc(body_mass_g))
+```
+
+**Tri par espèce puis poids croissant (attention à l'ordre des variables)**
+
+```{r}
+penguins |> 
+  arrange(species, body_mass_g)
+```
+
+<br>
+
+> Lors du tri les NA's sont rajoutés à la fin
+
+## Fonction `select()`
+
+Sélectionne des colonnes par leurs noms  
+
+**Sélectionne la variable species**
+
+```{r}
+penguins |> 
+  select(species)
+```
+
+> ATTENTION: le résultat est toujours un data.frame
+> même s'il n'y a qu'une seule colonne
+
+```{r}
+penguins |> 
+  select(species) |> 
+  dim()
+```
+
+**La fonction `pull()` permet d'extraire une colonne et de la convertir en vecteur**
+
+```{r, class.output = "scroll-300", collapse = FALSE}
+penguins |> 
+  select(species) |> 
+  pull()
+```
+
+**Sélectionne les variables species et body_mass_g**
+
+```{r}
+penguins |> 
+  select(species, body_mass_g)
+```
+
+**Sélection des 3 premières colonnes**
+
+```{r}
+penguins |> 
+  select(1:3)
+```
+
+**Enlève la première colonne**
+
+```{r}
+penguins |> 
+  select(-1)
+```
+
+**Enlève les variables "sex" et "island"**
+
+```{r}
+penguins |> 
+  select(-sex, -island)
+```
+
+**Sélectionne les colonnes de classe numeric**
+
+```{r}
+penguins |> 
+  select(where(is.numeric))
+```
+
+> La variable `year` est de type numeric, conversion en factor
+
+```{r}
+penguins$year <- factor(penguins$year)
+```
+
+
+**Sélectionne les colonnes de classe factor**
+
+```{r}
+penguins |> 
+  select(where(is.factor))
+```
+
+**Sélectionne les mesures de bec**
+
+```{r}
+penguins |> 
+  select(starts_with("bill"))
+```
+
+**Sélectionne les mesures en mm**
+
+```{r}
+penguins |> 
+  select(ends_with("mm"))
+```
+
+**Sélectionne les mesures de longueurs**
+
+```{r}
+penguins |> 
+  select(contains("length"))
+```
+
+## Fonction `summarise()` + `group_by()`
+
+`Summarise`: Résume une ou plusieurs colonnes en une ou plusieurs valeurs en utilisant des fonctions  
+
+`Group_by`: Permet d'appliquer une ou plusieurs fonctions à un data.frame fractionné en groupes  
+
+**Calcule le poids moyen de tous les pingouins**  
+
+```{r}
+penguins |> 
+  summarise(moy = mean(body_mass_g))
+```
+
+> Par défaut les objets tibble sont affichés avec 3 chiffres significatifs
+
+```{r}
+tibble(x = c(1.2345, 12.345, 123.45, 1234.5, 12345))
+```
+
+> Pour afficher plus de chiffres, notamment après la virgule il faut paramétrer l'option `pillar.sigfig`
+
+```{r}
+options(pillar.sigfig = 6)
+tibble(x = c(1.2345, 12.34, 123.45, 1234.5, 12345))
+```
+
+```{r}
+penguins |> 
+  summarise(moy = mean(body_mass_g))
+```
+
+**Calcule le poids moyen au sein de chaque espèce**
+
+```{r}
+penguins |>
+  group_by(species) |> 
+  summarise(moy = mean(body_mass_g))
+```
+
+**Calcule le poids moyen au sein de chaque espèce et pas sexe**
+
+```{r}
+penguins |>
+  group_by(species, sex) |> 
+  summarise(moy = mean(body_mass_g))
+```
+
+> La table résultat au format long est pratique pour enchainer sur un graphe
+> En revanche pour présenter les résultats on privilégiera un format plus "large"  
+> On utilise les fonctions `pivot_longeur` et `pivot_wider` pour passer d'une configuration à l'autre
+
+**Crée une colonne par sexe**
+
+```{r}
+penguins |>
+  group_by(species, sex) |> 
+  summarise(moy = mean(body_mass_g)) |> 
+  pivot_wider(names_from = sex,
+              values_from = moy)
+```
+
+**Calcule le poids moyen et l'écart-type au sein de chaque espèce et pas sexe**
+
+```{r}
+penguins |>
+  group_by(species, sex) |> 
+  summarise(moy = mean(body_mass_g),
+            sd = sd(body_mass_g)) |> 
+  pivot_wider(names_from = sex,
+              values_from = c(moy, sd))
+```
+
+> Par défaut l'intitulé de chaque colonne est constitué de la fonction puis du groupe  
+> On peut personnaliser cette sortie avec le paramètre `names_glue`  
+> Ce paramètre suit la synthaxe du package glue (https://github.com/tidyverse/glue)
+
+```{r}
+penguins |>
+  group_by(species, sex) |> 
+  summarise(moy = mean(body_mass_g),
+            sd = sd(body_mass_g)) |> 
+  pivot_wider(names_from = sex,
+              values_from = c(moy, sd),
+              names_glue = "{sex}_of_{.value}")
+```
+
+**Plot des poids moyen par sexe et par espèces**
+
+```{r}
+penguins |> 
+  group_by(species, sex) |> 
+  summarise(moy = mean(body_mass_g)) |>
+  ggplot(aes(x = sex,
+             y = moy,
+             colour = species)) +
+  geom_point(shape = 18,
+              size = 5)
+```
+
+> Pour rendre le script moins chargé on peut créer une fonction pour calculer plusieurs descripteurs
+
+**Fonction pour le calcul de plusieurs descripteurs**
+
+```{r}
+fct_descr <- function(x)
+{
+  data.frame(min = min(x),
+             moy = mean(x),
+             sd = sd(x),
+             max = max(x))
+}
+```
+
+**Application de la fonction**
+
+```{r}
+penguins |> 
+  group_by(species, sex) |> 
+  summarise(fct_descr(body_mass_g))
+```
+
+> On peut utiliser des fonctions plus complexes mais attention au format de sortie
+
+```{r, error = TRUE}
+penguins |> 
+  group_by(island) |> 
+  summarise(lm(bill_length_mm ~ sex))
+```
+
+> Le format de sortie doit être un data.frame  
+> On utilise la fonction `tidy()` du package broom pour récupérer un data.frame en sortie
+
+```{r}
+penguins |> 
+  group_by(island) |> 
+  summarise(broom::tidy(lm(bill_length_mm ~ sex)))
+```
+
+**On enlève les intercept**
+
+```{r}
+penguins |> 
+  group_by(island) |> 
+  summarise(broom::tidy(lm(bill_length_mm ~ sex))) |> 
+  filter(!grepl("Inter", term))
+```
+
+
+## Fonction `ACROSS()`
+
+Applique une même transformation à plusieurs colonnes à la fois, elle remplace les fonctions `summarise_at()`, `summarise_if()`, `summarise_all()`
+
+**Calcule les effectifs, moyenne et écart-type de toutes les variables numériques par espèce**
+
+```{r}
+penguins |> 
+  group_by(species) |> 
+  summarise(across(where(is.numeric), list(length, mean, sd)))
+```
+
+**Donner un nom aux fonctions pour les identifier dans le tableau résultat**
+
+```{r}
+penguins |> 
+  group_by(species) |> 
+  summarise(across(where(is.numeric), list(count = length, 
+                                           moy = mean, 
+                                           sd = sd)))
+```
+
+**Calcul de la SEM**
+
+Fonction de calcul de la SEM
+
+```{r}
+sem <- function(x)
+{
+  sd(x)/sqrt(length(x))
+}
+```
+
+**Calcul des descripteurs et de la SEM en regroupant par espèce et sexe**
+
+```{r}
+penguins |> 
+  group_by(species, sex) |> 
+  summarise(across(where(is.numeric), list(count = length,
+                                           moy = mean,
+                                           sd = sd,
+                                           SEM = sem)))
+```
+
+## Application à un objet Phyloseq
+
+**Récupération de l'objet**
+
+```{r}
+con <- url("https://forgemia.inra.fr/lcauquil/16s/-/raw/main/data/16S_phyloseq.rdata")
+load(file = con)
+```
+
+**L'objet data est un objet de classe phyloseq**
+
+```{r}
+data
+```
+
+**Transformation en data.frame avec la fonction `ps_melt()` du package phyloseq**
+
+```{r, class.output = "scroll-300", collapse = FALSE}
+df <- psmelt(data)
+df
+```
+
+**Transformation en tibble**
+
+```{r}
+df <- as_tibble(df)
+df
+```
+
+**Abondance totale par échantillon (sample_sums)**
+
+```{r}
+df |> 
+  group_by(Sample) |> 
+  summarise(som = sum(Abundance))
+```
+
+**Tableau regroupant différents descripteurs associé aux nombres de séquences par échantillon**
+
+Version sans dplyr: 5 objets créés
+
+```{r}
+Mean<-mean(sample_sums(data))
+sd<-sd(sample_sums(data))
+min<-min(sample_sums(data))
+max<-max(sample_sums(data))
+total<-sum((sample_sums(data)))
+tab1<-as.data.frame(rbind(total,Mean,sd,min,max))
+tab1<- tibble::rownames_to_column(tab1, "Parameters")
+colnames(tab1)<-c("Parameters","Values")
+tab1
+```
+
+Version avec dplyr: aucun objet créé
+
+```{r, message = FALSE}
+fct_descr <- function(x)
+{
+  data.frame(Total = sum(x),
+             Mean = mean(x),
+             Sd = sd(x),
+             Min = min(x),
+             Max = max(x))
+}
+
+data |> 
+  psmelt() |> 
+  group_by(Sample) |> 
+  summarise(som = sum(Abundance)) |> 
+  summarise(fct_descr(som)) |> 
+  pivot_longer(cols = everything(),
+               names_to = "Parametres",
+               values_to = "Values")
+```
+
+**Abondance par OTU (taxa_sums)**
+
+```{r}
+df |> 
+  group_by(OTU) |> 
+  summarise(som = sum(Abundance))
+```
+
+**Transformation en abundance relative et positionne en colonne 2**
+
+```{r}
+df |> 
+  group_by(Sample) |> 
+  mutate(rel_abund = Abundance/sum(Abundance), .before = 2) -> df_rel
+df_rel
+```
+
+**Vérification**
+
+```{r}
+df_rel |> 
+  group_by(Sample) |> 
+  summarise(som = sum(rel_abund))
+```
+
+**Garde OTU avec abondance > 0.1% du total**
+
+```{r}
+df_rel |> 
+  ungroup() |> 
+  filter(Abundance > sum(Abundance)*0.001)
+```
+
+
+
+
+
+
+
+
+
+
