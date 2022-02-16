@@ -1,7 +1,7 @@
 ---
 title: "tuto_dplyr_tidyr"
 author: "Laurent Cauquil"
-date: "2022-02-15"
+date: "2022-02-16"
 output:
   html_document: 
     code_folding: show
