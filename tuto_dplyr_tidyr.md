@@ -1,12 +1,13 @@
 ---
 title: "tuto_dplyr_tidyr"
 author: "Laurent Cauquil"
-date: "2022-02-25"
+date: "2022-05-20"
 output:
   html_document: 
     code_folding: show
     toc: yes
     toc_float: yes
+    theme: simplex
     css: css_style.css
     keep_md: TRUE
   pdf_document:
@@ -73,7 +74,7 @@ Les dimensions de la table ainsi que le type de chaque colonne sont précisés.
 
 ```r
 penguins
-## # A tibble: 344 x 8
+## # A tibble: 344 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.1          18.7               181        3750
@@ -86,7 +87,7 @@ penguins
 ##  8 Adelie  Torgersen           39.2          19.6               195        4675
 ##  9 Adelie  Torgersen           34.1          18.1               193        3475
 ## 10 Adelie  Torgersen           42            20.2               190        4250
-## # ... with 334 more rows, and 2 more variables: sex <fct>, year <int>
+## # … with 334 more rows, and 2 more variables: sex <fct>, year <int>
 ```
 
 L'objet reste un data.frame mais avec les caractéristiques supplémentaires d'un objet de type tibble (tbl)  
@@ -135,7 +136,7 @@ Sélection de lignes par des valeurs
 ```r
 penguins |> 
   filter(body_mass_g > 4000)
-## # A tibble: 172 x 8
+## # A tibble: 172 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.2          19.6               195        4675
@@ -148,7 +149,7 @@ penguins |>
 ##  8 Adelie  Dream               44.1          19.7               196        4400
 ##  9 Adelie  Dream               39.6          18.8               190        4600
 ## 10 Adelie  Dream               42.3          21.2               191        4150
-## # ... with 162 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 162 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 >**TIDYLOG**  
@@ -168,7 +169,7 @@ suppressPackageStartupMessages(library(tidylog))
 penguins |> 
   filter(sex == "male")
 ## filter: removed 176 rows (51%), 168 rows remaining
-## # A tibble: 168 x 8
+## # A tibble: 168 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.1          18.7               181        3750
@@ -181,7 +182,7 @@ penguins |>
 ##  8 Adelie  Biscoe              37.7          18.7               180        3600
 ##  9 Adelie  Biscoe              38.2          18.1               185        3950
 ## 10 Adelie  Biscoe              38.8          17.2               180        3800
-## # ... with 158 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 158 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les lignes correspondant aux males pour un poids > 4000 gr**
@@ -191,7 +192,7 @@ penguins |>
 penguins |> 
   filter(sex == "male", body_mass_g > 4000)
 ## filter: removed 235 rows (68%), 109 rows remaining
-## # A tibble: 109 x 8
+## # A tibble: 109 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.2          19.6               195        4675
@@ -204,11 +205,11 @@ penguins |>
 ##  8 Adelie  Dream               39.6          18.8               190        4600
 ##  9 Adelie  Dream               42.3          21.2               191        4150
 ## 10 Adelie  Biscoe              40.1          18.9               188        4300
-## # ... with 99 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 99 more rows, and 2 more variables: sex <fct>, year <fct>
 penguins |> 
   filter(sex == "male" & body_mass_g > 4000)
 ## filter: removed 235 rows (68%), 109 rows remaining
-## # A tibble: 109 x 8
+## # A tibble: 109 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.2          19.6               195        4675
@@ -221,7 +222,7 @@ penguins |>
 ##  8 Adelie  Dream               39.6          18.8               190        4600
 ##  9 Adelie  Dream               42.3          21.2               191        4150
 ## 10 Adelie  Biscoe              40.1          18.9               188        4300
-## # ... with 99 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 99 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les poids compris entre 3500 et 4000 gr**
@@ -231,7 +232,7 @@ penguins |>
 penguins |> 
   filter(between(body_mass_g,  3500, 4500))
 ## filter: removed 188 rows (55%), 156 rows remaining
-## # A tibble: 156 x 8
+## # A tibble: 156 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.1          18.7               181        3750
@@ -244,7 +245,7 @@ penguins |>
 ##  8 Adelie  Torgersen           34.6          21.1               198        4400
 ##  9 Adelie  Torgersen           36.6          17.8               185        3700
 ## 10 Adelie  Torgersen           42.5          20.7               197        4500
-## # ... with 146 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 146 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les poids  < 3500 et > 4000 gr (utiliser ! devant between)**
@@ -254,7 +255,7 @@ penguins |>
 penguins |> 
   filter(!between(body_mass_g,  3500, 4500))
 ## filter: removed 158 rows (46%), 186 rows remaining
-## # A tibble: 186 x 8
+## # A tibble: 186 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           40.3          18                 195        3250
@@ -267,7 +268,7 @@ penguins |>
 ##  8 Adelie  Torgersen           34.4          18.4               184        3325
 ##  9 Adelie  Biscoe              37.8          18.3               174        3400
 ## 10 Adelie  Biscoe              40.5          17.9               187        3200
-## # ... with 176 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 176 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les mesures faites dans les années 2007 et 2009**
@@ -277,7 +278,7 @@ penguins |>
 penguins |> 
   filter(year %in% c("2007", "2008"))
 ## filter: removed 120 rows (35%), 224 rows remaining
-## # A tibble: 224 x 8
+## # A tibble: 224 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.1          18.7               181        3750
@@ -290,7 +291,7 @@ penguins |>
 ##  8 Adelie  Torgersen           39.2          19.6               195        4675
 ##  9 Adelie  Torgersen           34.1          18.1               193        3475
 ## 10 Adelie  Torgersen           42            20.2               190        4250
-## # ... with 214 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 214 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les poids > au poids moyen**
@@ -300,8 +301,8 @@ penguins |>
 penguins |> 
   filter(body_mass_g > mean(body_mass_g))
 ## filter: removed all rows (100%)
-## # A tibble: 0 x 8
-## # ... with 8 variables: species <fct>, island <fct>, bill_length_mm <dbl>,
+## # A tibble: 0 × 8
+## # … with 8 variables: species <fct>, island <fct>, bill_length_mm <dbl>,
 ## #   bill_depth_mm <dbl>, flipper_length_mm <int>, body_mass_g <int>, sex <fct>,
 ## #   year <fct>
 ```
@@ -316,7 +317,7 @@ penguins |>
 penguins |> 
   filter(body_mass_g > mean(body_mass_g, na.rm = T))
 ## filter: removed 195 rows (57%), 149 rows remaining
-## # A tibble: 149 x 8
+## # A tibble: 149 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.2          19.6               195        4675
@@ -329,7 +330,7 @@ penguins |>
 ##  8 Adelie  Biscoe              40.1          18.9               188        4300
 ##  9 Adelie  Biscoe              41.3          21.1               195        4400
 ## 10 Adelie  Torgersen           41.8          19.4               198        4450
-## # ... with 139 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 139 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 <br>
@@ -347,7 +348,7 @@ penguins |>
 penguins |> 
   filter(body_mass_g > mean(body_mass_g))
 ## filter: removed 188 rows (56%), 145 rows remaining
-## # A tibble: 145 x 8
+## # A tibble: 145 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.2          19.6               195        4675
@@ -360,7 +361,7 @@ penguins |>
 ##  8 Adelie  Biscoe              41.3          21.1               195        4400
 ##  9 Adelie  Torgersen           41.8          19.4               198        4450
 ## 10 Adelie  Torgersen           42.8          18.5               195        4250
-## # ... with 135 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 135 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les males de poids > au poids moyen (de tous les poips)**
@@ -372,7 +373,7 @@ penguins |>
   filter(sex == "male")
 ## filter: removed 188 rows (56%), 145 rows remaining
 ## filter: removed 53 rows (37%), 92 rows remaining
-## # A tibble: 92 x 8
+## # A tibble: 92 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.2          19.6               195        4675
@@ -385,7 +386,7 @@ penguins |>
 ##  8 Adelie  Biscoe              41.3          21.1               195        4400
 ##  9 Adelie  Torgersen           41.8          19.4               198        4450
 ## 10 Adelie  Torgersen           42.8          18.5               195        4250
-## # ... with 82 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 82 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Sélectionne les noms d'espèces avec la syllabe "de" dedans**  
@@ -396,7 +397,7 @@ penguins |>
 penguins |> 
   filter(grepl("de", species))
 ## filter: removed 187 rows (56%), 146 rows remaining
-## # A tibble: 146 x 8
+## # A tibble: 146 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Torgersen           39.1          18.7               181        3750
@@ -409,7 +410,7 @@ penguins |>
 ##  8 Adelie  Torgersen           41.1          17.6               182        3200
 ##  9 Adelie  Torgersen           38.6          21.2               191        3800
 ## 10 Adelie  Torgersen           34.6          21.1               198        4400
-## # ... with 136 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 136 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 ## Fonction `arrange()`
@@ -422,8 +423,8 @@ Appliquer un tri croissant sur une ou plusieurs colonnes
 ```r
 penguins |> 
   arrange(body_mass_g)
-## # A tibble: 333 x 8
-##    species   island    bill_length_mm bill_depth_mm flipper_length_~ body_mass_g
+## # A tibble: 333 × 8
+##    species   island    bill_length_mm bill_depth_mm flipper_length_… body_mass_g
 ##    <fct>     <fct>              <dbl>         <dbl>            <int>       <int>
 ##  1 Chinstrap Dream               46.9          16.6              192        2700
 ##  2 Adelie    Biscoe              36.5          16.6              181        2850
@@ -435,7 +436,7 @@ penguins |>
 ##  8 Adelie    Biscoe              37.9          18.6              193        2925
 ##  9 Adelie    Dream               37            16.9              185        3000
 ## 10 Adelie    Dream               37.3          16.8              192        3000
-## # ... with 323 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 323 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Tri décroissant par le poids**
@@ -444,7 +445,7 @@ penguins |>
 ```r
 penguins |> 
   arrange(desc(body_mass_g))
-## # A tibble: 333 x 8
+## # A tibble: 333 × 8
 ##    species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>           <dbl>         <dbl>             <int>       <int>
 ##  1 Gentoo  Biscoe           49.2          15.2               221        6300
@@ -457,7 +458,7 @@ penguins |>
 ##  8 Gentoo  Biscoe           49.3          15.7               217        5850
 ##  9 Gentoo  Biscoe           55.1          16                 230        5850
 ## 10 Gentoo  Biscoe           49.5          16.2               229        5800
-## # ... with 323 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 323 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 **Tri par espèce puis poids croissant (attention à l'ordre des variables)**
@@ -466,7 +467,7 @@ penguins |>
 ```r
 penguins |> 
   arrange(species, body_mass_g)
-## # A tibble: 333 x 8
+## # A tibble: 333 × 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##    <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
 ##  1 Adelie  Biscoe              36.5          16.6               181        2850
@@ -479,7 +480,7 @@ penguins |>
 ##  8 Adelie  Dream               37.3          16.8               192        3000
 ##  9 Adelie  Torgersen           35.9          16.6               190        3050
 ## 10 Adelie  Torgersen           35.2          15.9               186        3050
-## # ... with 323 more rows, and 2 more variables: sex <fct>, year <fct>
+## # … with 323 more rows, and 2 more variables: sex <fct>, year <fct>
 ```
 
 <br>
@@ -497,7 +498,7 @@ Sélectionne des colonnes par leurs noms
 penguins |> 
   select(species)
 ## select: dropped 7 variables (island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, …)
-## # A tibble: 333 x 1
+## # A tibble: 333 × 1
 ##    species
 ##    <fct>  
 ##  1 Adelie 
@@ -510,7 +511,7 @@ penguins |>
 ##  8 Adelie 
 ##  9 Adelie 
 ## 10 Adelie 
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 > ATTENTION: le résultat est toujours un data.frame
@@ -597,7 +598,7 @@ penguins |>
 penguins |> 
   select(species, body_mass_g)
 ## select: dropped 6 variables (island, bill_length_mm, bill_depth_mm, flipper_length_mm, sex, …)
-## # A tibble: 333 x 2
+## # A tibble: 333 × 2
 ##    species body_mass_g
 ##    <fct>         <int>
 ##  1 Adelie         3750
@@ -610,7 +611,7 @@ penguins |>
 ##  8 Adelie         3200
 ##  9 Adelie         3800
 ## 10 Adelie         4400
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 **Sélection des 3 premières colonnes**
@@ -620,7 +621,7 @@ penguins |>
 penguins |> 
   select(1:3)
 ## select: dropped 5 variables (bill_depth_mm, flipper_length_mm, body_mass_g, sex, year)
-## # A tibble: 333 x 3
+## # A tibble: 333 × 3
 ##    species island    bill_length_mm
 ##    <fct>   <fct>              <dbl>
 ##  1 Adelie  Torgersen           39.1
@@ -633,7 +634,7 @@ penguins |>
 ##  8 Adelie  Torgersen           41.1
 ##  9 Adelie  Torgersen           38.6
 ## 10 Adelie  Torgersen           34.6
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 **Enlève la première colonne**
@@ -643,20 +644,20 @@ penguins |>
 penguins |> 
   select(-1)
 ## select: dropped one variable (species)
-## # A tibble: 333 x 7
-##    island  bill_length_mm bill_depth_mm flipper_length_~ body_mass_g sex   year 
+## # A tibble: 333 × 7
+##    island  bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex   year 
 ##    <fct>            <dbl>         <dbl>            <int>       <int> <fct> <fct>
-##  1 Torger~           39.1          18.7              181        3750 male  2007 
-##  2 Torger~           39.5          17.4              186        3800 fema~ 2007 
-##  3 Torger~           40.3          18                195        3250 fema~ 2007 
-##  4 Torger~           36.7          19.3              193        3450 fema~ 2007 
-##  5 Torger~           39.3          20.6              190        3650 male  2007 
-##  6 Torger~           38.9          17.8              181        3625 fema~ 2007 
-##  7 Torger~           39.2          19.6              195        4675 male  2007 
-##  8 Torger~           41.1          17.6              182        3200 fema~ 2007 
-##  9 Torger~           38.6          21.2              191        3800 male  2007 
-## 10 Torger~           34.6          21.1              198        4400 male  2007 
-## # ... with 323 more rows
+##  1 Torger…           39.1          18.7              181        3750 male  2007 
+##  2 Torger…           39.5          17.4              186        3800 fema… 2007 
+##  3 Torger…           40.3          18                195        3250 fema… 2007 
+##  4 Torger…           36.7          19.3              193        3450 fema… 2007 
+##  5 Torger…           39.3          20.6              190        3650 male  2007 
+##  6 Torger…           38.9          17.8              181        3625 fema… 2007 
+##  7 Torger…           39.2          19.6              195        4675 male  2007 
+##  8 Torger…           41.1          17.6              182        3200 fema… 2007 
+##  9 Torger…           38.6          21.2              191        3800 male  2007 
+## 10 Torger…           34.6          21.1              198        4400 male  2007 
+## # … with 323 more rows
 ```
 
 **Enlève les variables "sex" et "island"**
@@ -666,7 +667,7 @@ penguins |>
 penguins |> 
   select(-sex, -island)
 ## select: dropped 2 variables (island, sex)
-## # A tibble: 333 x 6
+## # A tibble: 333 × 6
 ##    species bill_length_mm bill_depth_mm flipper_length_mm body_mass_g year 
 ##    <fct>            <dbl>         <dbl>             <int>       <int> <fct>
 ##  1 Adelie            39.1          18.7               181        3750 2007 
@@ -679,7 +680,7 @@ penguins |>
 ##  8 Adelie            41.1          17.6               182        3200 2007 
 ##  9 Adelie            38.6          21.2               191        3800 2007 
 ## 10 Adelie            34.6          21.1               198        4400 2007 
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 **Sélectionne les colonnes de classe numeric**
@@ -689,7 +690,7 @@ penguins |>
 penguins |> 
   select(where(is.numeric))
 ## select: dropped 4 variables (species, island, sex, year)
-## # A tibble: 333 x 4
+## # A tibble: 333 × 4
 ##    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
 ##             <dbl>         <dbl>             <int>       <int>
 ##  1           39.1          18.7               181        3750
@@ -702,7 +703,7 @@ penguins |>
 ##  8           41.1          17.6               182        3200
 ##  9           38.6          21.2               191        3800
 ## 10           34.6          21.1               198        4400
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 > La variable `year` est de type numeric, conversion en factor
@@ -720,7 +721,7 @@ penguins$year <- factor(penguins$year)
 penguins |> 
   select(where(is.factor))
 ## select: dropped 4 variables (bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
-## # A tibble: 333 x 4
+## # A tibble: 333 × 4
 ##    species island    sex    year 
 ##    <fct>   <fct>     <fct>  <fct>
 ##  1 Adelie  Torgersen male   2007 
@@ -733,7 +734,7 @@ penguins |>
 ##  8 Adelie  Torgersen female 2007 
 ##  9 Adelie  Torgersen male   2007 
 ## 10 Adelie  Torgersen male   2007 
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 **Sélectionne les mesures de bec**
@@ -743,7 +744,7 @@ penguins |>
 penguins |> 
   select(starts_with("bill"))
 ## select: dropped 6 variables (species, island, flipper_length_mm, body_mass_g, sex, …)
-## # A tibble: 333 x 2
+## # A tibble: 333 × 2
 ##    bill_length_mm bill_depth_mm
 ##             <dbl>         <dbl>
 ##  1           39.1          18.7
@@ -756,7 +757,7 @@ penguins |>
 ##  8           41.1          17.6
 ##  9           38.6          21.2
 ## 10           34.6          21.1
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 **Sélectionne les mesures en mm**
@@ -766,7 +767,7 @@ penguins |>
 penguins |> 
   select(ends_with("mm"))
 ## select: dropped 5 variables (species, island, body_mass_g, sex, year)
-## # A tibble: 333 x 3
+## # A tibble: 333 × 3
 ##    bill_length_mm bill_depth_mm flipper_length_mm
 ##             <dbl>         <dbl>             <int>
 ##  1           39.1          18.7               181
@@ -779,7 +780,7 @@ penguins |>
 ##  8           41.1          17.6               182
 ##  9           38.6          21.2               191
 ## 10           34.6          21.1               198
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 **Sélectionne les mesures de longueurs**
@@ -789,7 +790,7 @@ penguins |>
 penguins |> 
   select(contains("length"))
 ## select: dropped 6 variables (species, island, bill_depth_mm, body_mass_g, sex, …)
-## # A tibble: 333 x 2
+## # A tibble: 333 × 2
 ##    bill_length_mm flipper_length_mm
 ##             <dbl>             <int>
 ##  1           39.1               181
@@ -802,7 +803,7 @@ penguins |>
 ##  8           41.1               182
 ##  9           38.6               191
 ## 10           34.6               198
-## # ... with 323 more rows
+## # … with 323 more rows
 ```
 
 ## Fonction `summarise()` + `group_by()`
@@ -818,7 +819,7 @@ penguins |>
 penguins |> 
   summarise(moy = mean(body_mass_g))
 ## summarise: now one row and one column, ungrouped
-## # A tibble: 1 x 1
+## # A tibble: 1 × 1
 ##     moy
 ##   <dbl>
 ## 1 4207.
@@ -829,7 +830,7 @@ penguins |>
 
 ```r
 tibble(x = c(1.2345, 12.345, 123.45, 1234.5, 12345))
-## # A tibble: 5 x 1
+## # A tibble: 5 × 1
 ##          x
 ##      <dbl>
 ## 1     1.23
@@ -845,7 +846,7 @@ tibble(x = c(1.2345, 12.345, 123.45, 1234.5, 12345))
 ```r
 options(pillar.sigfig = 6)
 tibble(x = c(1.2345, 12.34, 123.45, 1234.5, 12345))
-## # A tibble: 5 x 1
+## # A tibble: 5 × 1
 ##            x
 ##        <dbl>
 ## 1     1.2345
@@ -860,7 +861,7 @@ tibble(x = c(1.2345, 12.34, 123.45, 1234.5, 12345))
 penguins |> 
   summarise(moy = mean(body_mass_g))
 ## summarise: now one row and one column, ungrouped
-## # A tibble: 1 x 1
+## # A tibble: 1 × 1
 ##       moy
 ##     <dbl>
 ## 1 4207.06
@@ -875,7 +876,7 @@ penguins |>
   summarise(moy = mean(body_mass_g))
 ## group_by: one grouping variable (species)
 ## summarise: now 3 rows and 2 columns, ungrouped
-## # A tibble: 3 x 2
+## # A tibble: 3 × 2
 ##   species       moy
 ##   <fct>       <dbl>
 ## 1 Adelie    3706.16
@@ -892,7 +893,7 @@ penguins |>
   summarise(moy = mean(body_mass_g))
 ## group_by: 2 grouping variables (species, sex)
 ## summarise: now 6 rows and 3 columns, one group variable remaining (species)
-## # A tibble: 6 x 3
+## # A tibble: 6 × 3
 ## # Groups:   species [3]
 ##   species   sex        moy
 ##   <fct>     <fct>    <dbl>
@@ -920,7 +921,7 @@ penguins |>
 ## group_by: 2 grouping variables (species, sex)
 ## summarise: now 6 rows and 3 columns, one group variable remaining (species)
 ## pivot_wider: reorganized (sex, moy) into (female, male) [was 6x3, now 3x3]
-## # A tibble: 3 x 3
+## # A tibble: 3 × 3
 ## # Groups:   species [3]
 ##   species    female    male
 ##   <fct>       <dbl>   <dbl>
@@ -942,7 +943,7 @@ penguins |>
 ## group_by: 2 grouping variables (species, sex)
 ## summarise: now 6 rows and 4 columns, one group variable remaining (species)
 ## pivot_wider: reorganized (sex, moy, sd) into (moy_female, moy_male, sd_female, sd_male) [was 6x4, now 3x5]
-## # A tibble: 3 x 5
+## # A tibble: 3 × 5
 ## # Groups:   species [3]
 ##   species   moy_female moy_male sd_female sd_male
 ##   <fct>          <dbl>    <dbl>     <dbl>   <dbl>
@@ -967,7 +968,7 @@ penguins |>
 ## group_by: 2 grouping variables (species, sex)
 ## summarise: now 6 rows and 4 columns, one group variable remaining (species)
 ## pivot_wider: reorganized (sex, moy, sd) into (female_of_moy, male_of_moy, female_of_sd, male_of_sd) [was 6x4, now 3x5]
-## # A tibble: 3 x 5
+## # A tibble: 3 × 5
 ## # Groups:   species [3]
 ##   species   female_of_moy male_of_moy female_of_sd male_of_sd
 ##   <fct>             <dbl>       <dbl>        <dbl>      <dbl>
@@ -1018,7 +1019,7 @@ penguins |>
   summarise(fct_descr(body_mass_g))
 ## group_by: 2 grouping variables (species, sex)
 ## summarise: now 6 rows and 6 columns, one group variable remaining (species)
-## # A tibble: 6 x 6
+## # A tibble: 6 × 6
 ## # Groups:   species [3]
 ##   species   sex      min     moy      sd   max
 ##   <fct>     <fct>  <int>   <dbl>   <dbl> <int>
@@ -1040,8 +1041,8 @@ penguins |>
 ## group_by: one grouping variable (island)
 ## Error in `.fun()`:
 ## ! Problem while computing `..1 = lm(bill_length_mm ~ sex)`.
-## x `..1` must be a vector, not a `lm` object.
-## i The error occurred in group 1: island = Biscoe.
+## ✖ `..1` must be a vector, not a `lm` object.
+## ℹ The error occurred in group 1: island = Biscoe.
 ```
 
 > Le format de sortie doit être un data.frame  
@@ -1054,7 +1055,7 @@ penguins |>
   summarise(broom::tidy(lm(bill_length_mm ~ sex)))
 ## group_by: one grouping variable (island)
 ## summarise: now 6 rows and 6 columns, one group variable remaining (island)
-## # A tibble: 6 x 6
+## # A tibble: 6 × 6
 ## # Groups:   island [3]
 ##   island    term        estimate std.error statistic      p.value
 ##   <fct>     <chr>          <dbl>     <dbl>     <dbl>        <dbl>
@@ -1077,7 +1078,7 @@ penguins |>
 ## group_by: one grouping variable (island)
 ## summarise: now 6 rows and 6 columns, one group variable remaining (island)
 ## filter (grouped): removed 3 rows (50%), 3 rows remaining
-## # A tibble: 3 x 6
+## # A tibble: 3 × 6
 ## # Groups:   island [3]
 ##   island    term    estimate std.error statistic    p.value
 ##   <fct>     <chr>      <dbl>     <dbl>     <dbl>      <dbl>
@@ -1100,13 +1101,13 @@ penguins |>
   summarise(across(where(is.numeric), list(length, mean, sd)))
 ## group_by: one grouping variable (species)
 ## summarise: now 3 rows and 13 columns, ungrouped
-## # A tibble: 3 x 13
+## # A tibble: 3 × 13
 ##   species   bill_length_mm_1 bill_length_mm_2 bill_length_mm_3 bill_depth_mm_1
 ##   <fct>                <int>            <dbl>            <dbl>           <int>
 ## 1 Adelie                 146          38.8240          2.66260             146
 ## 2 Chinstrap               68          48.8338          3.33926              68
 ## 3 Gentoo                 119          47.5681          3.10612             119
-## # ... with 8 more variables: bill_depth_mm_2 <dbl>, bill_depth_mm_3 <dbl>,
+## # … with 8 more variables: bill_depth_mm_2 <dbl>, bill_depth_mm_3 <dbl>,
 ## #   flipper_length_mm_1 <int>, flipper_length_mm_2 <dbl>,
 ## #   flipper_length_mm_3 <dbl>, body_mass_g_1 <int>, body_mass_g_2 <dbl>,
 ## #   body_mass_g_3 <dbl>
@@ -1123,13 +1124,13 @@ penguins |>
                                            sd = sd)))
 ## group_by: one grouping variable (species)
 ## summarise: now 3 rows and 13 columns, ungrouped
-## # A tibble: 3 x 13
-##   species   bill_length_mm_c~ bill_length_mm_~ bill_length_mm_~ bill_depth_mm_c~
+## # A tibble: 3 × 13
+##   species   bill_length_mm_c… bill_length_mm_… bill_length_mm_… bill_depth_mm_c…
 ##   <fct>                 <int>            <dbl>            <dbl>            <int>
 ## 1 Adelie                  146          38.8240          2.66260              146
 ## 2 Chinstrap                68          48.8338          3.33926               68
 ## 3 Gentoo                  119          47.5681          3.10612              119
-## # ... with 8 more variables: bill_depth_mm_moy <dbl>, bill_depth_mm_sd <dbl>,
+## # … with 8 more variables: bill_depth_mm_moy <dbl>, bill_depth_mm_sd <dbl>,
 ## #   flipper_length_mm_count <int>, flipper_length_mm_moy <dbl>,
 ## #   flipper_length_mm_sd <dbl>, body_mass_g_count <int>, body_mass_g_moy <dbl>,
 ## #   body_mass_g_sd <dbl>
@@ -1159,7 +1160,7 @@ penguins |>
                                            SEM = sem)))
 ## group_by: 2 grouping variables (species, sex)
 ## summarise: now 6 rows and 18 columns, one group variable remaining (species)
-## # A tibble: 6 x 18
+## # A tibble: 6 × 18
 ## # Groups:   species [3]
 ##   species   sex    bill_length_mm_count bill_length_mm_moy bill_length_mm_sd
 ##   <fct>     <fct>                 <int>              <dbl>             <dbl>
@@ -1169,7 +1170,7 @@ penguins |>
 ## 4 Chinstrap male                     34            51.0941           1.56456
 ## 5 Gentoo    female                   58            45.5638           2.05125
 ## 6 Gentoo    male                     61            49.4738           2.72059
-## # ... with 13 more variables: bill_length_mm_SEM <dbl>,
+## # … with 13 more variables: bill_length_mm_SEM <dbl>,
 ## #   bill_depth_mm_count <int>, bill_depth_mm_moy <dbl>, bill_depth_mm_sd <dbl>,
 ## #   bill_depth_mm_SEM <dbl>, flipper_length_mm_count <int>,
 ## #   flipper_length_mm_moy <dbl>, flipper_length_mm_sd <dbl>,
@@ -36932,20 +36933,20 @@ df
 ```r
 df <- as_tibble(df)
 df
-## # A tibble: 31,872 x 14
+## # A tibble: 31,872 × 14
 ##    OTU     Sample Abundance EnvType Description FoodType SampleID Kingdom Phylum
 ##    <chr>   <chr>      <dbl> <fct>   <fct>       <fct>    <fct>    <chr>   <chr> 
-##  1 Cluste~ MVT0.~      6784 Poultr~ LOT10       Meat     MVT0.LO~ Bacter~ Firmi~
-##  2 Cluste~ VHT0.~      6740 Ground~ LOT8        Meat     VHT0.LO~ Bacter~ Firmi~
-##  3 Cluste~ SFT0.~      6695 Smoked~ LOT1        Seafood  SFT0.LO~ Bacter~ Prote~
-##  4 Cluste~ VHT0.~      6607 Ground~ LOT1        Meat     VHT0.LO~ Bacter~ Firmi~
-##  5 Cluste~ DLT0.~      6389 DicedB~ LOT3        Meat     DLT0.LO~ Bacter~ Firmi~
-##  6 Cluste~ VHT0.~      5983 Ground~ LOT7        Meat     VHT0.LO~ Bacter~ Firmi~
-##  7 Cluste~ DLT0.~      5958 DicedB~ LOT1        Meat     DLT0.LO~ Bacter~ Firmi~
-##  8 Cluste~ SFT0.~      5909 Smoked~ LOT7        Seafood  SFT0.LO~ Bacter~ Prote~
-##  9 Cluste~ FCT0.~      5866 CodFil~ LOT3        Seafood  FCT0.LO~ Bacter~ Firmi~
-## 10 Cluste~ CDT0.~      5795 Cooked~ LOT2        Seafood  CDT0.LO~ Bacter~ Firmi~
-## # ... with 31,862 more rows, and 5 more variables: Class <chr>, Order <chr>,
+##  1 Cluste… MVT0.…      6784 Poultr… LOT10       Meat     MVT0.LO… Bacter… Firmi…
+##  2 Cluste… VHT0.…      6740 Ground… LOT8        Meat     VHT0.LO… Bacter… Firmi…
+##  3 Cluste… SFT0.…      6695 Smoked… LOT1        Seafood  SFT0.LO… Bacter… Prote…
+##  4 Cluste… VHT0.…      6607 Ground… LOT1        Meat     VHT0.LO… Bacter… Firmi…
+##  5 Cluste… DLT0.…      6389 DicedB… LOT3        Meat     DLT0.LO… Bacter… Firmi…
+##  6 Cluste… VHT0.…      5983 Ground… LOT7        Meat     VHT0.LO… Bacter… Firmi…
+##  7 Cluste… DLT0.…      5958 DicedB… LOT1        Meat     DLT0.LO… Bacter… Firmi…
+##  8 Cluste… SFT0.…      5909 Smoked… LOT7        Seafood  SFT0.LO… Bacter… Prote…
+##  9 Cluste… FCT0.…      5866 CodFil… LOT3        Seafood  FCT0.LO… Bacter… Firmi…
+## 10 Cluste… CDT0.…      5795 Cooked… LOT2        Seafood  CDT0.LO… Bacter… Firmi…
+## # … with 31,862 more rows, and 5 more variables: Class <chr>, Order <chr>,
 ## #   Family <chr>, Genus <chr>, Species <chr>
 ```
 
@@ -36958,7 +36959,7 @@ df |>
   summarise(som = sum(Abundance))
 ## group_by: one grouping variable (Sample)
 ## summarise: now 64 rows and 2 columns, ungrouped
-## # A tibble: 64 x 2
+## # A tibble: 64 × 2
 ##    Sample       som
 ##    <chr>      <dbl>
 ##  1 BHT0.LOT01  8694
@@ -36971,7 +36972,7 @@ df |>
 ##  8 BHT0.LOT10  8626
 ##  9 CDT0.LOT02  8769
 ## 10 CDT0.LOT04  8635
-## # ... with 54 more rows
+## # … with 54 more rows
 ```
 
 **Tableau regroupant différents descripteurs associé aux nombres de séquences par échantillon**
@@ -37018,7 +37019,7 @@ data |>
   pivot_longer(cols = everything(),
                names_to = "Parametres",
                values_to = "Values")
-## # A tibble: 5 x 2
+## # A tibble: 5 × 2
 ##   Parametres     Values
 ##   <chr>           <dbl>
 ## 1 Total      552671    
@@ -37037,7 +37038,7 @@ df |>
   summarise(som = sum(Abundance))
 ## group_by: one grouping variable (OTU)
 ## summarise: now 498 rows and 2 columns, ungrouped
-## # A tibble: 498 x 2
+## # A tibble: 498 × 2
 ##    OTU           som
 ##    <chr>       <dbl>
 ##  1 Cluster_1   84846
@@ -37050,7 +37051,7 @@ df |>
 ##  8 Cluster_105   644
 ##  9 Cluster_106   589
 ## 10 Cluster_107   637
-## # ... with 488 more rows
+## # … with 488 more rows
 ```
 
 **Transformation en abundance relative et positionne en colonne 2**
@@ -37063,21 +37064,21 @@ df |>
 ## group_by: one grouping variable (Sample)
 ## mutate (grouped): new variable 'rel_abund' (double) with 2,866 unique values and 0% NA
 df_rel
-## # A tibble: 31,872 x 15
+## # A tibble: 31,872 × 15
 ## # Groups:   Sample [64]
 ##    OTU       rel_abund Sample    Abundance EnvType Description FoodType SampleID
 ##    <chr>         <dbl> <chr>         <dbl> <fct>   <fct>       <fct>    <fct>   
-##  1 Cluster_2  0.749779 MVT0.LOT~      6784 Poultr~ LOT10       Meat     MVT0.LO~
-##  2 Cluster_1  0.771167 VHT0.LOT~      6740 Ground~ LOT8        Meat     VHT0.LO~
-##  3 Cluster_3  0.754962 SFT0.LOT~      6695 Smoked~ LOT1        Seafood  SFT0.LO~
-##  4 Cluster_1  0.753450 VHT0.LOT~      6607 Ground~ LOT1        Meat     VHT0.LO~
-##  5 Cluster_1  0.743599 DLT0.LOT~      6389 DicedB~ LOT3        Meat     DLT0.LO~
-##  6 Cluster_1  0.689206 VHT0.LOT~      5983 Ground~ LOT7        Meat     VHT0.LO~
-##  7 Cluster_1  0.682318 DLT0.LOT~      5958 DicedB~ LOT1        Meat     DLT0.LO~
-##  8 Cluster_3  0.668893 SFT0.LOT~      5909 Smoked~ LOT7        Seafood  SFT0.LO~
-##  9 Cluster_7  0.675729 FCT0.LOT~      5866 CodFil~ LOT3        Seafood  FCT0.LO~
-## 10 Cluster_9  0.660851 CDT0.LOT~      5795 Cooked~ LOT2        Seafood  CDT0.LO~
-## # ... with 31,862 more rows, and 7 more variables: Kingdom <chr>, Phylum <chr>,
+##  1 Cluster_2  0.749779 MVT0.LOT…      6784 Poultr… LOT10       Meat     MVT0.LO…
+##  2 Cluster_1  0.771167 VHT0.LOT…      6740 Ground… LOT8        Meat     VHT0.LO…
+##  3 Cluster_3  0.754962 SFT0.LOT…      6695 Smoked… LOT1        Seafood  SFT0.LO…
+##  4 Cluster_1  0.753450 VHT0.LOT…      6607 Ground… LOT1        Meat     VHT0.LO…
+##  5 Cluster_1  0.743599 DLT0.LOT…      6389 DicedB… LOT3        Meat     DLT0.LO…
+##  6 Cluster_1  0.689206 VHT0.LOT…      5983 Ground… LOT7        Meat     VHT0.LO…
+##  7 Cluster_1  0.682318 DLT0.LOT…      5958 DicedB… LOT1        Meat     DLT0.LO…
+##  8 Cluster_3  0.668893 SFT0.LOT…      5909 Smoked… LOT7        Seafood  SFT0.LO…
+##  9 Cluster_7  0.675729 FCT0.LOT…      5866 CodFil… LOT3        Seafood  FCT0.LO…
+## 10 Cluster_9  0.660851 CDT0.LOT…      5795 Cooked… LOT2        Seafood  CDT0.LO…
+## # … with 31,862 more rows, and 7 more variables: Kingdom <chr>, Phylum <chr>,
 ## #   Class <chr>, Order <chr>, Family <chr>, Genus <chr>, Species <chr>
 ```
 
@@ -37090,7 +37091,7 @@ df_rel |>
   summarise(som = sum(rel_abund))
 ## group_by: one grouping variable (Sample)
 ## summarise: now 64 rows and 2 columns, ungrouped
-## # A tibble: 64 x 2
+## # A tibble: 64 × 2
 ##    Sample       som
 ##    <chr>      <dbl>
 ##  1 BHT0.LOT01     1
@@ -37103,7 +37104,7 @@ df_rel |>
 ##  8 BHT0.LOT10     1
 ##  9 CDT0.LOT02     1
 ## 10 CDT0.LOT04     1
-## # ... with 54 more rows
+## # … with 54 more rows
 ```
 
 **Garde OTU avec abondance > 0.1% du total**
@@ -37115,20 +37116,20 @@ df_rel |>
   filter(Abundance > sum(Abundance)*0.001)
 ## ungroup: no grouping variables
 ## filter: removed 31,686 rows (99%), 186 rows remaining
-## # A tibble: 186 x 15
+## # A tibble: 186 × 15
 ##    OTU       rel_abund Sample    Abundance EnvType Description FoodType SampleID
 ##    <chr>         <dbl> <chr>         <dbl> <fct>   <fct>       <fct>    <fct>   
-##  1 Cluster_2  0.749779 MVT0.LOT~      6784 Poultr~ LOT10       Meat     MVT0.LO~
-##  2 Cluster_1  0.771167 VHT0.LOT~      6740 Ground~ LOT8        Meat     VHT0.LO~
-##  3 Cluster_3  0.754962 SFT0.LOT~      6695 Smoked~ LOT1        Seafood  SFT0.LO~
-##  4 Cluster_1  0.753450 VHT0.LOT~      6607 Ground~ LOT1        Meat     VHT0.LO~
-##  5 Cluster_1  0.743599 DLT0.LOT~      6389 DicedB~ LOT3        Meat     DLT0.LO~
-##  6 Cluster_1  0.689206 VHT0.LOT~      5983 Ground~ LOT7        Meat     VHT0.LO~
-##  7 Cluster_1  0.682318 DLT0.LOT~      5958 DicedB~ LOT1        Meat     DLT0.LO~
-##  8 Cluster_3  0.668893 SFT0.LOT~      5909 Smoked~ LOT7        Seafood  SFT0.LO~
-##  9 Cluster_7  0.675729 FCT0.LOT~      5866 CodFil~ LOT3        Seafood  FCT0.LO~
-## 10 Cluster_9  0.660851 CDT0.LOT~      5795 Cooked~ LOT2        Seafood  CDT0.LO~
-## # ... with 176 more rows, and 7 more variables: Kingdom <chr>, Phylum <chr>,
+##  1 Cluster_2  0.749779 MVT0.LOT…      6784 Poultr… LOT10       Meat     MVT0.LO…
+##  2 Cluster_1  0.771167 VHT0.LOT…      6740 Ground… LOT8        Meat     VHT0.LO…
+##  3 Cluster_3  0.754962 SFT0.LOT…      6695 Smoked… LOT1        Seafood  SFT0.LO…
+##  4 Cluster_1  0.753450 VHT0.LOT…      6607 Ground… LOT1        Meat     VHT0.LO…
+##  5 Cluster_1  0.743599 DLT0.LOT…      6389 DicedB… LOT3        Meat     DLT0.LO…
+##  6 Cluster_1  0.689206 VHT0.LOT…      5983 Ground… LOT7        Meat     VHT0.LO…
+##  7 Cluster_1  0.682318 DLT0.LOT…      5958 DicedB… LOT1        Meat     DLT0.LO…
+##  8 Cluster_3  0.668893 SFT0.LOT…      5909 Smoked… LOT7        Seafood  SFT0.LO…
+##  9 Cluster_7  0.675729 FCT0.LOT…      5866 CodFil… LOT3        Seafood  FCT0.LO…
+## 10 Cluster_9  0.660851 CDT0.LOT…      5795 Cooked… LOT2        Seafood  CDT0.LO…
+## # … with 176 more rows, and 7 more variables: Kingdom <chr>, Phylum <chr>,
 ## #   Class <chr>, Order <chr>, Family <chr>, Genus <chr>, Species <chr>
 ```
 
