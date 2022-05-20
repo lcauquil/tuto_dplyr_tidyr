@@ -1,7 +1,7 @@
 ---
 title: "tuto_dplyr_tidyr"
 author: "Laurent Cauquil"
-date: "2022-02-16"
+date: "2022-02-25"
 output:
   html_document: 
     code_folding: show
@@ -1038,8 +1038,8 @@ penguins |>
   group_by(island) |> 
   summarise(lm(bill_length_mm ~ sex))
 ## group_by: one grouping variable (island)
-## Error: Problem with `summarise()` input `..1`.
-## i `..1 = lm(bill_length_mm ~ sex)`.
+## Error in `.fun()`:
+## ! Problem while computing `..1 = lm(bill_length_mm ~ sex)`.
 ## x `..1` must be a vector, not a `lm` object.
 ## i The error occurred in group 1: island = Biscoe.
 ```

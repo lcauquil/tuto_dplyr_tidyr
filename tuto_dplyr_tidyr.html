@@ -11,7 +11,7 @@
 
 <meta name="author" content="Laurent Cauquil" />
 
-<meta name="date" content="2022-02-16" />
+<meta name="date" content="2022-02-25" />
 
 <title>tuto_dplyr_tidyr</title>
 
@@ -1593,7 +1593,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">tuto_dplyr_tidyr</h1>
 <h4 class="author">Laurent Cauquil</h4>
-<h4 class="date">2022-02-16</h4>
+<h4 class="date">2022-02-25</h4>
 
 </div>
 
@@ -1613,7 +1613,8 @@ library(phyloseq)
 suppressPackageStartupMessages(library(DataExplorer))
 library(ggplot2)</code></pre>
 <p><br></p>
-<p><strong>Raccourcis pour obtenir le pipe: <code>Ctrl + Alt + M</code></strong></p>
+<p><strong>Raccourcis pour obtenir le pipe:
+<code>Ctrl + Alt + M</code></strong></p>
 </div>
 <div id="penguins-dataset" class="section level2">
 <h2>Penguins dataset</h2>
@@ -1643,7 +1644,8 @@ library(ggplot2)</code></pre>
 <tr class="even">
 <td align="left">island</td>
 <td align="left">factor</td>
-<td align="left">island in Palmer Archipelago, Antarctica (Biscoe, Dream or Torgersen)</td>
+<td align="left">island in Palmer Archipelago, Antarctica (Biscoe, Dream
+or Torgersen)</td>
 </tr>
 <tr class="odd">
 <td align="left">bill_length_mm</td>
@@ -1681,8 +1683,10 @@ library(ggplot2)</code></pre>
 <div id="objet-de-class-tibble" class="section level3">
 <h3>Objet de class tibble</h3>
 <p>C’est un data.frame au format tibble.<br />
-L’affichage des colonnes s’adapte à la largeur de la fenêtre de sortie.<br />
-Les dimensions de la table ainsi que le type de chaque colonne sont précisés.</p>
+L’affichage des colonnes s’adapte à la largeur de la fenêtre de
+sortie.<br />
+Les dimensions de la table ainsi que le type de chaque colonne sont
+précisés.</p>
 <pre class="r"><code>penguins
 ## # A tibble: 344 x 8
 ##    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -1698,7 +1702,8 @@ Les dimensions de la table ainsi que le type de chaque colonne sont précisés.<
 ##  9 Adelie  Torgersen           34.1          18.1               193        3475
 ## 10 Adelie  Torgersen           42            20.2               190        4250
 ## # ... with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
-<p>L’objet reste un data.frame mais avec les caractéristiques supplémentaires d’un objet de type tibble (tbl)</p>
+<p>L’objet reste un data.frame mais avec les caractéristiques
+supplémentaires d’un objet de type tibble (tbl)</p>
 <pre class="r"><code>class(penguins)
 ## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 <p>Conversion de la variable année en factor</p>
@@ -1717,7 +1722,8 @@ Les dimensions de la table ainsi que le type de chaque colonne sont précisés.<
 <div id="fonction-filter" class="section level2">
 <h2>Fonction <code>filter()</code></h2>
 <p>Sélection de lignes par des valeurs</p>
-<p><strong>Sélectionne les lignes pour lesquelles le poids &gt; 4000 g</strong></p>
+<p><strong>Sélectionne les lignes pour lesquelles le poids &gt; 4000
+g</strong></p>
 <pre class="r"><code>penguins |&gt; 
   filter(body_mass_g &gt; 4000)
 ## # A tibble: 172 x 8
@@ -1737,7 +1743,9 @@ Les dimensions de la table ainsi que le type de chaque colonne sont précisés.<
 <blockquote>
 <p><strong>TIDYLOG</strong></p>
 </blockquote>
-<p>Le package <code>tidylog</code> permet d’afficher le résultat de chaque opération effectuée par la plupart des fonctions des package <code>dplyr</code> et <code>tidyr</code>.<br />
+<p>Le package <code>tidylog</code> permet d’afficher le résultat de
+chaque opération effectuée par la plupart des fonctions des package
+<code>dplyr</code> et <code>tidyr</code>.<br />
 Peut éventuellement ralentir une opération.</p>
 <pre class="r"><code>suppressPackageStartupMessages(library(tidylog))</code></pre>
 <p><strong>Sélectionne les lignes correspondant aux males</strong></p>
@@ -1758,7 +1766,8 @@ Peut éventuellement ralentir une opération.</p>
 ##  9 Adelie  Biscoe              38.2          18.1               185        3950
 ## 10 Adelie  Biscoe              38.8          17.2               180        3800
 ## # ... with 158 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Sélectionne les lignes correspondant aux males pour un poids &gt; 4000 gr</strong></p>
+<p><strong>Sélectionne les lignes correspondant aux males pour un poids
+&gt; 4000 gr</strong></p>
 <pre class="r"><code>penguins |&gt; 
   filter(sex == &quot;male&quot;, body_mass_g &gt; 4000)
 ## filter: removed 235 rows (68%), 109 rows remaining
@@ -1793,7 +1802,8 @@ penguins |&gt;
 ##  9 Adelie  Dream               42.3          21.2               191        4150
 ## 10 Adelie  Biscoe              40.1          18.9               188        4300
 ## # ... with 99 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Sélectionne les poids compris entre 3500 et 4000 gr</strong></p>
+<p><strong>Sélectionne les poids compris entre 3500 et 4000
+gr</strong></p>
 <pre class="r"><code>penguins |&gt; 
   filter(between(body_mass_g,  3500, 4500))
 ## filter: removed 188 rows (55%), 156 rows remaining
@@ -1811,7 +1821,8 @@ penguins |&gt;
 ##  9 Adelie  Torgersen           36.6          17.8               185        3700
 ## 10 Adelie  Torgersen           42.5          20.7               197        4500
 ## # ... with 146 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Sélectionne les poids &lt; 3500 et &gt; 4000 gr (utiliser ! devant between)</strong></p>
+<p><strong>Sélectionne les poids &lt; 3500 et &gt; 4000 gr (utiliser !
+devant between)</strong></p>
 <pre class="r"><code>penguins |&gt; 
   filter(!between(body_mass_g,  3500, 4500))
 ## filter: removed 158 rows (46%), 186 rows remaining
@@ -1829,7 +1840,8 @@ penguins |&gt;
 ##  9 Adelie  Biscoe              37.8          18.3               174        3400
 ## 10 Adelie  Biscoe              40.5          17.9               187        3200
 ## # ... with 176 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Sélectionne les mesures faites dans les années 2007 et 2009</strong></p>
+<p><strong>Sélectionne les mesures faites dans les années 2007 et
+2009</strong></p>
 <pre class="r"><code>penguins |&gt; 
   filter(year %in% c(&quot;2007&quot;, &quot;2008&quot;))
 ## filter: removed 120 rows (35%), 224 rows remaining
@@ -1878,7 +1890,8 @@ penguins |&gt;
 ## # ... with 139 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
 <p><br></p>
 <blockquote>
-<p>Pour la suite du script on supprime toutes les lignes avec au moins 1 NA</p>
+<p>Pour la suite du script on supprime toutes les lignes avec au moins 1
+NA</p>
 </blockquote>
 <pre class="r"><code>penguins |&gt; 
   na.omit() -&gt; penguins</code></pre>
@@ -1899,7 +1912,8 @@ penguins |&gt;
 ##  9 Adelie  Torgersen           41.8          19.4               198        4450
 ## 10 Adelie  Torgersen           42.8          18.5               195        4250
 ## # ... with 135 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Sélectionne les males de poids &gt; au poids moyen (de tous les poips)</strong></p>
+<p><strong>Sélectionne les males de poids &gt; au poids moyen (de tous
+les poips)</strong></p>
 <pre class="r"><code>penguins |&gt; 
   filter(body_mass_g &gt; mean(body_mass_g)) |&gt; 
   filter(sex == &quot;male&quot;)
@@ -1919,7 +1933,8 @@ penguins |&gt;
 ##  9 Adelie  Torgersen           41.8          19.4               198        4450
 ## 10 Adelie  Torgersen           42.8          18.5               195        4250
 ## # ... with 82 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Sélectionne les noms d’espèces avec la syllabe “de” dedans</strong><br />
+<p><strong>Sélectionne les noms d’espèces avec la syllabe “de”
+dedans</strong><br />
 (aucun intérêt, c’est pour l’exemple 🙂)</p>
 <pre class="r"><code>penguins |&gt; 
   filter(grepl(&quot;de&quot;, species))
@@ -1976,7 +1991,8 @@ penguins |&gt;
 ##  9 Gentoo  Biscoe           55.1          16                 230        5850
 ## 10 Gentoo  Biscoe           49.5          16.2               229        5800
 ## # ... with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;fct&gt;</code></pre>
-<p><strong>Tri par espèce puis poids croissant (attention à l’ordre des variables)</strong></p>
+<p><strong>Tri par espèce puis poids croissant (attention à l’ordre des
+variables)</strong></p>
 <pre class="r"><code>penguins |&gt; 
   arrange(species, body_mass_g)
 ## # A tibble: 333 x 8
@@ -2020,14 +2036,16 @@ penguins |&gt;
 ## 10 Adelie 
 ## # ... with 323 more rows</code></pre>
 <blockquote>
-<p>ATTENTION: le résultat est toujours un data.frame même s’il n’y a qu’une seule colonne</p>
+<p>ATTENTION: le résultat est toujours un data.frame même s’il n’y a
+qu’une seule colonne</p>
 </blockquote>
 <pre class="r"><code>penguins |&gt; 
   select(species) |&gt; 
   dim()
 ## select: dropped 7 variables (island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, …)
 ## [1] 333   1</code></pre>
-<p><strong>La fonction <code>pull()</code> permet d’extraire une colonne et de la convertir en vecteur</strong></p>
+<p><strong>La fonction <code>pull()</code> permet d’extraire une colonne
+et de la convertir en vecteur</strong></p>
 <pre class="r"><code>penguins |&gt; 
   select(species) |&gt; 
   pull()</code></pre>
@@ -2172,7 +2190,8 @@ penguins |&gt;
 ## 10           34.6          21.1               198        4400
 ## # ... with 323 more rows</code></pre>
 <blockquote>
-<p>La variable <code>year</code> est de type numeric, conversion en factor</p>
+<p>La variable <code>year</code> est de type numeric, conversion en
+factor</p>
 </blockquote>
 <pre class="r"><code>penguins$year &lt;- factor(penguins$year)</code></pre>
 <p><strong>Sélectionne les colonnes de classe factor</strong></p>
@@ -2250,8 +2269,10 @@ penguins |&gt;
 </div>
 <div id="fonction-summarise-group_by" class="section level2">
 <h2>Fonction <code>summarise()</code> + <code>group_by()</code></h2>
-<p><code>Summarise</code>: Résume une ou plusieurs colonnes en une ou plusieurs valeurs en utilisant des fonctions</p>
-<p><code>Group_by</code>: Permet d’appliquer une ou plusieurs fonctions à un data.frame fractionné en groupes</p>
+<p><code>Summarise</code>: Résume une ou plusieurs colonnes en une ou
+plusieurs valeurs en utilisant des fonctions</p>
+<p><code>Group_by</code>: Permet d’appliquer une ou plusieurs fonctions
+à un data.frame fractionné en groupes</p>
 <p><strong>Calcule le poids moyen de tous les pingouins</strong></p>
 <pre class="r"><code>penguins |&gt; 
   summarise(moy = mean(body_mass_g))
@@ -2261,7 +2282,8 @@ penguins |&gt;
 ##   &lt;dbl&gt;
 ## 1 4207.</code></pre>
 <blockquote>
-<p>Par défaut les objets tibble sont affichés avec 3 chiffres significatifs</p>
+<p>Par défaut les objets tibble sont affichés avec 3 chiffres
+significatifs</p>
 </blockquote>
 <pre class="r"><code>tibble(x = c(1.2345, 12.345, 123.45, 1234.5, 12345))
 ## # A tibble: 5 x 1
@@ -2273,7 +2295,8 @@ penguins |&gt;
 ## 4  1234.  
 ## 5 12345</code></pre>
 <blockquote>
-<p>Pour afficher plus de chiffres, notamment après la virgule il faut paramétrer l’option <code>pillar.sigfig</code></p>
+<p>Pour afficher plus de chiffres, notamment après la virgule il faut
+paramétrer l’option <code>pillar.sigfig</code></p>
 </blockquote>
 <pre class="r"><code>options(pillar.sigfig = 6)
 tibble(x = c(1.2345, 12.34, 123.45, 1234.5, 12345))
@@ -2304,7 +2327,8 @@ tibble(x = c(1.2345, 12.34, 123.45, 1234.5, 12345))
 ## 1 Adelie    3706.16
 ## 2 Chinstrap 3733.09
 ## 3 Gentoo    5092.44</code></pre>
-<p><strong>Calcule le poids moyen au sein de chaque espèce et pas sexe</strong></p>
+<p><strong>Calcule le poids moyen au sein de chaque espèce et pas
+sexe</strong></p>
 <pre class="r"><code>penguins |&gt;
   group_by(species, sex) |&gt; 
   summarise(moy = mean(body_mass_g))
@@ -2321,8 +2345,11 @@ tibble(x = c(1.2345, 12.34, 123.45, 1234.5, 12345))
 ## 5 Gentoo    female 4679.74
 ## 6 Gentoo    male   5484.84</code></pre>
 <blockquote>
-<p>La table résultat au format long est pratique pour enchainer sur un graphe En revanche pour présenter les résultats on privilégiera un format plus “large”<br />
-On utilise les fonctions <code>pivot_longeur</code> et <code>pivot_wider</code> pour passer d’une configuration à l’autre</p>
+<p>La table résultat au format long est pratique pour enchainer sur un
+graphe En revanche pour présenter les résultats on privilégiera un
+format plus “large”<br />
+On utilise les fonctions <code>pivot_longeur</code> et
+<code>pivot_wider</code> pour passer d’une configuration à l’autre</p>
 </blockquote>
 <p><strong>Crée une colonne par sexe</strong></p>
 <pre class="r"><code>penguins |&gt;
@@ -2340,7 +2367,8 @@ On utilise les fonctions <code>pivot_longeur</code> et <code>pivot_wider</code> 
 ## 1 Adelie    3368.84 4043.49
 ## 2 Chinstrap 3527.21 3938.97
 ## 3 Gentoo    4679.74 5484.84</code></pre>
-<p><strong>Calcule le poids moyen et l’écart-type au sein de chaque espèce et pas sexe</strong></p>
+<p><strong>Calcule le poids moyen et l’écart-type au sein de chaque
+espèce et pas sexe</strong></p>
 <pre class="r"><code>penguins |&gt;
   group_by(species, sex) |&gt; 
   summarise(moy = mean(body_mass_g),
@@ -2358,8 +2386,10 @@ On utilise les fonctions <code>pivot_longeur</code> et <code>pivot_wider</code> 
 ## 2 Chinstrap    3527.21  3938.97   285.334 362.138
 ## 3 Gentoo       4679.74  5484.84   281.578 313.159</code></pre>
 <blockquote>
-<p>Par défaut l’intitulé de chaque colonne est constitué de la fonction puis du groupe<br />
-On peut personnaliser cette sortie avec le paramètre <code>names_glue</code><br />
+<p>Par défaut l’intitulé de chaque colonne est constitué de la fonction
+puis du groupe<br />
+On peut personnaliser cette sortie avec le paramètre
+<code>names_glue</code><br />
 Ce paramètre suit la synthaxe du package glue (<a href="https://github.com/tidyverse/glue" class="uri">https://github.com/tidyverse/glue</a>)</p>
 </blockquote>
 <pre class="r"><code>penguins |&gt;
@@ -2392,9 +2422,11 @@ Ce paramètre suit la synthaxe du package glue (<a href="https://github.com/tidy
 ## summarise: now 6 rows and 3 columns, one group variable remaining (species)</code></pre>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <blockquote>
-<p>Pour rendre le script moins chargé on peut créer une fonction pour calculer plusieurs descripteurs</p>
+<p>Pour rendre le script moins chargé on peut créer une fonction pour
+calculer plusieurs descripteurs</p>
 </blockquote>
-<p><strong>Fonction pour le calcul de plusieurs descripteurs</strong></p>
+<p><strong>Fonction pour le calcul de plusieurs
+descripteurs</strong></p>
 <pre class="r"><code>fct_descr &lt;- function(x)
 {
   data.frame(min = min(x),
@@ -2419,19 +2451,21 @@ Ce paramètre suit la synthaxe du package glue (<a href="https://github.com/tidy
 ## 5 Gentoo    female  3950 4679.74 281.578  5200
 ## 6 Gentoo    male    4750 5484.84 313.159  6300</code></pre>
 <blockquote>
-<p>On peut utiliser des fonctions plus complexes mais attention au format de sortie</p>
+<p>On peut utiliser des fonctions plus complexes mais attention au
+format de sortie</p>
 </blockquote>
 <pre class="r"><code>penguins |&gt; 
   group_by(island) |&gt; 
   summarise(lm(bill_length_mm ~ sex))
 ## group_by: one grouping variable (island)
-## Error: Problem with `summarise()` input `..1`.
-## i `..1 = lm(bill_length_mm ~ sex)`.
+## Error in `.fun()`:
+## ! Problem while computing `..1 = lm(bill_length_mm ~ sex)`.
 ## x `..1` must be a vector, not a `lm` object.
 ## i The error occurred in group 1: island = Biscoe.</code></pre>
 <blockquote>
 <p>Le format de sortie doit être un data.frame<br />
-On utilise la fonction <code>tidy()</code> du package broom pour récupérer un data.frame en sortie</p>
+On utilise la fonction <code>tidy()</code> du package broom pour
+récupérer un data.frame en sortie</p>
 </blockquote>
 <pre class="r"><code>penguins |&gt; 
   group_by(island) |&gt; 
@@ -2466,8 +2500,11 @@ On utilise la fonction <code>tidy()</code> du package broom pour récupérer un 
 </div>
 <div id="fonction-across" class="section level2">
 <h2>Fonction <code>ACROSS()</code></h2>
-<p>Applique une même transformation à plusieurs colonnes à la fois, elle remplace les fonctions <code>summarise_at()</code>, <code>summarise_if()</code>, <code>summarise_all()</code></p>
-<p><strong>Calcule les effectifs, moyenne et écart-type de toutes les variables numériques par espèce</strong></p>
+<p>Applique une même transformation à plusieurs colonnes à la fois, elle
+remplace les fonctions <code>summarise_at()</code>,
+<code>summarise_if()</code>, <code>summarise_all()</code></p>
+<p><strong>Calcule les effectifs, moyenne et écart-type de toutes les
+variables numériques par espèce</strong></p>
 <pre class="r"><code>penguins |&gt; 
   group_by(species) |&gt; 
   summarise(across(where(is.numeric), list(length, mean, sd)))
@@ -2483,7 +2520,8 @@ On utilise la fonction <code>tidy()</code> du package broom pour récupérer un 
 ## #   flipper_length_mm_1 &lt;int&gt;, flipper_length_mm_2 &lt;dbl&gt;,
 ## #   flipper_length_mm_3 &lt;dbl&gt;, body_mass_g_1 &lt;int&gt;, body_mass_g_2 &lt;dbl&gt;,
 ## #   body_mass_g_3 &lt;dbl&gt;</code></pre>
-<p><strong>Donner un nom aux fonctions pour les identifier dans le tableau résultat</strong></p>
+<p><strong>Donner un nom aux fonctions pour les identifier dans le
+tableau résultat</strong></p>
 <pre class="r"><code>penguins |&gt; 
   group_by(species) |&gt; 
   summarise(across(where(is.numeric), list(count = length, 
@@ -2507,7 +2545,8 @@ On utilise la fonction <code>tidy()</code> du package broom pour récupérer un 
 {
   sd(x)/sqrt(length(x))
 }</code></pre>
-<p><strong>Calcul des descripteurs et de la SEM en regroupant par espèce et sexe</strong></p>
+<p><strong>Calcul des descripteurs et de la SEM en regroupant par espèce
+et sexe</strong></p>
 <pre class="r"><code>penguins |&gt; 
   group_by(species, sex) |&gt; 
   summarise(across(where(is.numeric), list(count = length,
@@ -2545,7 +2584,8 @@ load(file = con)</code></pre>
 ## sample_data() Sample Data:       [ 64 samples by 4 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 498 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 498 tips and 497 internal nodes ]</code></pre>
-<p><strong>Transformation en data.frame avec la fonction <code>ps_melt()</code> du package phyloseq</strong></p>
+<p><strong>Transformation en data.frame avec la fonction
+<code>ps_melt()</code> du package phyloseq</strong></p>
 <pre class="r"><code>df &lt;- psmelt(data)
 df</code></pre>
 <pre class="scroll-300"><code>##               OTU     Sample Abundance        EnvType Description FoodType
@@ -38302,7 +38342,8 @@ df
 ##  9 CDT0.LOT02  8769
 ## 10 CDT0.LOT04  8635
 ## # ... with 54 more rows</code></pre>
-<p><strong>Tableau regroupant différents descripteurs associé aux nombres de séquences par échantillon</strong></p>
+<p><strong>Tableau regroupant différents descripteurs associé aux
+nombres de séquences par échantillon</strong></p>
 <p>Version sans dplyr: 5 objets créés</p>
 <pre class="r"><code>Mean&lt;-mean(sample_sums(data))
 sd&lt;-sd(sample_sums(data))
@@ -38365,7 +38406,8 @@ data |&gt;
 ##  9 Cluster_106   589
 ## 10 Cluster_107   637
 ## # ... with 488 more rows</code></pre>
-<p><strong>Transformation en abundance relative et positionne en colonne 2</strong></p>
+<p><strong>Transformation en abundance relative et positionne en colonne
+2</strong></p>
 <pre class="r"><code>df |&gt; 
   group_by(Sample) |&gt; 
   mutate(rel_abund = Abundance/sum(Abundance), .before = 2) -&gt; df_rel
